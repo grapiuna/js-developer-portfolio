@@ -1,4 +1,3 @@
-
 function updateProfileInfo(profileData) {
     const photo = document.getElementById('profile.photo')
     photo.src = profileData.photo
@@ -37,14 +36,29 @@ function updateLanguages(profileData) {
     languages.innerHTML = profileData.languages.map(language => `<li>${language}</li>`).join('')
 }
 
-function updatePortfolio(profileData) {
-    const portfolio = document.getElementById('profile.portfolio')
-    portfolio.innerHTML = profileData.portfolio.map(project => {
+function updateEducations(profileData) {
+    const educations = document.getElementById('profile.educations.formation')
+    educations.innerHTML = profileData.educations.formation.map(education => {
+        return `        
+            <ul>
+                <li>                                
+                    <a href="${education.certificate}" target="_blank"><img src="${education.logo}"></a>                                
+                </li>                            
+            </ul> 
+        `
+    }).join('')
+}
+
+function updateDegrees(profileData) {
+    const degrees = document.getElementById('profile.education.degree')
+    degrees.innerHTML = profileData.educations.degree.map(degree => {
         return `
-            <li>
-                <h3 ${project.github ? 'class="github"' : ''}>${project.name}</h3>
-                <a href="${project.url}" target="_blank">${project.url}</a>
-            </li>
+            <ul>
+                <li>
+                    <h3>${degree.name}</h3>
+                    <p class="period">${degree.period}</p>
+                </li>            
+            </ul>       
         `
     }).join('')
 }
@@ -57,17 +71,32 @@ function updateProfessionalExperience(profileData) {
                 <h3 class="title">${experience.name}</h3>
                 <p class="period">${experience.period}</p>
                 <p>${experience.description}</p>
-            </li>
+            </li>            
         `
+    }).join('')
+}
+
+function updatePortfolio(profileData) {
+    const portfolio = document.getElementById('profile.portfolio')
+    portfolio.innerHTML = profileData.portfolio.map(project => {
+        return `
+                <li>
+                    <h3 ${project.github ? 'class="github' : ''} "><a
+                    href="${project.url}"
+                    target="_blank">${project.name}</a></h3>
+                </li>
+            `
     }).join('')
 }
 
 (async () => {
     const profileData = await fetchProfileData()
     updateProfileInfo(profileData)
+    updateLanguages(profileData)
     updateSoftSkills(profileData)
     updateHardSkills(profileData)
-    updateLanguages(profileData)
-    updatePortfolio(profileData)
+    updateEducations(profileData)
+    updateDegrees(profileData)
     updateProfessionalExperience(profileData)
+    updatePortfolio(profileData)
 })()

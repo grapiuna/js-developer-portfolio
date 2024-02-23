@@ -1,3 +1,4 @@
+
 function updateProfileInfo(profileData) {
     const photo = document.getElementById('profile.photo')
     photo.src = profileData.photo
@@ -36,6 +37,18 @@ function updateLanguages(profileData) {
     languages.innerHTML = profileData.languages.map(language => `<li>${language}</li>`).join('')
 }
 
+function updatePortfolio(profileData) {
+    const portfolio = document.getElementById('profile.portfolio')
+    portfolio.innerHTML = profileData.portfolio.map(project => {
+        return `
+            <li>
+                <h3 ${project.github ? 'class="github"' : ''}>${project.name}</h3>
+                <a href="${project.url}" target="_blank">${project.url}</a>
+            </li>
+        `
+    }).join('')
+}
+
 function updateProfessionalExperience(profileData) {
     const professionalExperience = document.getElementById('profile.professionalExperience')
     professionalExperience.innerHTML = profileData.professionalExperience.map(experience => {
@@ -44,30 +57,17 @@ function updateProfessionalExperience(profileData) {
                 <h3 class="title">${experience.name}</h3>
                 <p class="period">${experience.period}</p>
                 <p>${experience.description}</p>
-            </li>            
+            </li>
         `
-    }).join('')
-}
-
-function updatePortfolio(profileData) {
-    const portfolio = document.getElementById('profile.portfolio')
-    portfolio.innerHTML = profileData.portfolio.map(project => {
-        return `
-                <li>
-                    <h3 ${project.github ? 'class="github' : ''} "><a
-                    href="${project.url}"
-                    target="_blank">${project.name}</a></h3>
-                </li>
-            `
     }).join('')
 }
 
 (async () => {
     const profileData = await fetchProfileData()
     updateProfileInfo(profileData)
-    updateLanguages(profileData)
     updateSoftSkills(profileData)
     updateHardSkills(profileData)
-    updateProfessionalExperience(profileData)
+    updateLanguages(profileData)
     updatePortfolio(profileData)
+    updateProfessionalExperience(profileData)
 })()
